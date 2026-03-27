@@ -1,0 +1,30 @@
+﻿<div id="app" class="container" style="width: 40%;">
+    <h3 class="mb-3 text-center">使用者資訊</h3>
+    <div class="form-floating mb-3">
+        <input class="form-control" placeholder="" v-model="name">
+        <label for="form-label">請輸入姓名</label>
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-primary" v-on:click="submit">送出</button>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="https://unpkg.com/vue@3.5.31/dist/vue.global.js"></script>
+    <script>
+        var appVue = {
+            data() { //model
+                return {
+                    name: "",
+                };
+            },
+            methods: {
+                submit() {
+                    alert(this.name);
+                }
+            }
+        };
+        var app = Vue.createApp(appVue).mount("#app");
+    </script>
+}

@@ -1,0 +1,115 @@
+﻿<button id="getEmployeeById" class="btn btn-primary">GetEmployeeById</button>
+<input id="employeeId" />
+<button id="postEmployee" class="btn btn-success">PostEmployee</button>
+<button id="putEmployee" class="btn btn-warning">PutEmployee</button>
+<button id="deleteEmployee" class="btn btn-danger">deleteEmployee</button>
+
+
+@section Scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.11.0/axios.min.js" integrity="sha512-h9644v03pHqrIHThkvXhB2PJ8zf5E9IyVnrSfZg8Yj8k4RsO4zldcQc4Bi9iVLUCCsqNY0b4WXVV4UB+wbWENA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        var baseAddress="https://localhost:7151";       // Developer
+        //var baseAddress="https://xxx";                // Staging
+        //var baseAddress="https://yyy";                // Production
+        //var baseAddress="https://zzz";                // Cloud
+
+        $("#getEmployeeById").on("click", async ()=>{
+            //alert("getEmployeeById");
+            try{
+                var employeeId=$("#employeeId").val();
+                var response=await fetch(`${baseAddress}/api/Employees/${employeeId}`, {
+                    method:"GET"
+                });
+                if (response.ok) {
+                    var data=await response.json();
+                    alert(JSON.stringify(data));
+                } 
+            }
+            catch(err) {
+                alert(err.message);
+            }
+        });
+
+        $("#postEmployee").on("click", async ()=>{
+            //alert("postEmployee");
+             var emp = {
+                "EmployeeId":0,
+                "FirstName": "Axios",
+                "LastName": "POST",
+                "Title":"Student"
+            }
+            try{
+                var response=await axios.post(`${baseAddress}/api/Employees`, JSON.stringify(emp), {
+                    headers:{
+                        "content-type":"application/json"
+                    }
+                });
+                if (response.data.ok) {
+                    alert("新增員工記錄成功!");
+                }
+                else{
+                    alert("新增員工記錄失敗!");
+                }
+            }
+            catch(err){
+                alert(err.message);
+            }
+        });
+
+        $("#putEmployee").on("click", async ()=>{
+            //alert("putEmployee");
+            var employeeId=$("#employeeId").val();
+            var emp= {
+                "EmployeeId":employeeId,
+                "FirstName": "Fuen",
+                "LastName": "0312",
+                "Title":"CEO"
+            };
+            try{
+                var response=await fetch(`${baseAddress}/api/Employees/${employeeId}`, {
+                    method: "PUT",
+                    body: JSON.stringify(emp),
+                    headers:{
+                        "content-type": "application/json"
+                    }
+                });
+                if (response.ok) {
+                    var data=await response.json();
+                    //alert(JSON.stringify(data));
+                    if (data.ok){
+                        alert("修改員工記錄成功!");
+                    }
+                    else{
+                        alert("修改員工記錄失敗!");
+                    }
+                }
+            }
+            catch(err) {
+                alert(err.message);
+            }
+        });
+
+        $("#deleteEmployee").on("click", async ()=>{
+            //alert("deleteEmployee");
+            try{
+                var response=await fetch(`${baseAddress}/api/Employees/${$("#employeeId").val()}`, {
+                    method:"DELETE"
+                });
+                if (response.ok) {
+                    var data=await response.json();
+                    if (data.ok){
+                        alert("刪除員工記錄成功!");
+                    }
+                    else{
+                        alert("刪除員工記錄失敗!");
+                    }
+                }
+            }
+            catch(err){
+                alert(err.message);
+            }
+        });
+
+    </script>
+}

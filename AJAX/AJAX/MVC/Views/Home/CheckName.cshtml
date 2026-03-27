@@ -1,0 +1,44 @@
+﻿<div class="container" style="width:40%">
+    <h3 class="mb-3 text-center">查詢員工</h3>
+    <div class="form-floating mb-3">
+        <input id="firstName" class="form-control" placeholder="" />
+        <label class="form-label">員工姓名</label>
+    </div>
+    <div class="mb-3">
+        <div id="result" />
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        var baseAddress="https://localhost:7080";       // Developer
+        //var baseAddress="https://xxx";                // Staging
+        //var baseAddress="https://yyy";                // Production
+        //var baseAddress="https://zzz";                // Cloud
+
+        $("#firstName").on("keyup", async ()=>{
+            //alert("checkName");
+            var form=new FormData();
+            form.append("FirstName", $("#firstName").val());
+            try{
+                var response=await fetch(`${baseAddress}/Ajax/CheckName`, {
+                    method: "POST",
+                    body: form
+                });
+                if (response.ok){
+                    var data=await response.text();
+                    if (data=="true") {
+                        $("#result").text("查有此員工").removeClass("text-danger").addClass("text-primary");
+                    }
+                    else {
+                        $("#result").text("查無此員工").removeClass("text-primary").addClass("text-danger");
+                    }                    
+                }
+            }
+            catch(err) {
+                alert(err.message);
+            }
+        });
+    </script>
+}

@@ -1,0 +1,62 @@
+﻿<button id="getGreet" class="btn btn-primary">Greet(GET)</button>
+<button id="postGreet" class="btn btn-primary">Greet(POST)</button>
+<img id="progress" src="~/images/progress.gif" style="display:none" />
+<div id="result"></div>
+
+@section Scripts
+{
+    <script>
+        var baseAddress="https://localhost:7080";       // Developer
+        //var baseAddress="https://xxx";                // Staging
+        //var baseAddress="https://yyy";                // Production
+        //var baseAddress="https://zzz";                // Cloud
+
+        $("#getGreet").on("click", async ()=>{
+            //alert("getGreet");
+            var p=new URLSearchParams({
+                Name:"小強"
+            });
+            try{
+                $("#progress").show();
+                $("#result").text("");
+                var response=await fetch(`${baseAddress}/Ajax/Greet?${p.toString()}`, {
+                    method:"GET"
+                });
+                $("#progress").hide();
+                if (response.ok) {
+                    var data=await response.text();
+                    $("#result").text(data);
+                }
+            }
+            catch(err) {
+                $("#progress").hide();
+                alert(err.message);
+            }            
+        });
+
+        $("#postGreet").on("click", async ()=>{
+            //alert("postGreet");
+            $("#progress").show();
+            var form=new FormData();
+            form.append("Name", "小明");
+            try{
+                var response=await fetch(`${baseAddress}/Ajax/PostGreet`, {
+                    method: "POST",
+                    body: form
+                    // headers:{
+                    //     "content-type": "資料格式"
+                    // }
+                });
+                $("#progress").hide();
+                if (response.ok){
+                    var data=await response.text();
+                    $("#result").text(data);
+                }
+            }
+            catch(err) {
+                 $("#progress").hide();
+                alert(err.message);
+            }
+        });
+    </script>
+}
