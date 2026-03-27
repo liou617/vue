@@ -33,11 +33,12 @@
             },
             methods: {        //controller      
                 fullname() {
-                    return `${this.FirstName}${this.LastName}`;
+                    return `全名：${this.FirstName}${this.LastName}`;
                 }
             },
             computed: {
-                data() {
+                
+                date() {
                     return new Date().toISOString().split("T")[0];
                 },
                 date1() {
