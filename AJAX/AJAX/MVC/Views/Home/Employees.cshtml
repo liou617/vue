@@ -9,7 +9,7 @@
 {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.11.0/axios.min.js" integrity="sha512-h9644v03pHqrIHThkvXhB2PJ8zf5E9IyVnrSfZg8Yj8k4RsO4zldcQc4Bi9iVLUCCsqNY0b4WXVV4UB+wbWENA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-        var baseAddress="https://localhost:7151";       // Developer
+        var baseAddress="https://localhost:7080";       // Developer
         //var baseAddress="https://xxx";                // Staging
         //var baseAddress="https://yyy";                // Production
         //var baseAddress="https://zzz";                // Cloud
@@ -18,7 +18,7 @@
             //alert("getEmployeeById");
             try{
                 var employeeId=$("#employeeId").val();
-                var response=await fetch(`${baseAddress}/api/Employees/${employeeId}`, {
+                var response=await fetch(`${baseAddress}/Home/GetExchangeRate`, {
                     method:"GET"
                 });
                 if (response.ok) {

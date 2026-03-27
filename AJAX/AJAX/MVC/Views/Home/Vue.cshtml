@@ -1,30 +1,44 @@
-﻿<div id="app" class="container" style="width: 40%;">
-    <h3 class="mb-3 text-center">使用者資訊</h3>
+﻿<div id="app" class="container" style="width:40%">
+    <h3 class="mb-3 text-center">換匯功能</h3>
     <div class="form-floating mb-3">
-        <input class="form-control" placeholder="" v-model="name">
-        <label for="form-label">請輸入姓名</label>
+        <input class="form-control" placeholder="" v-model="rate">
+        <label class="form-label">匯率</label>
     </div>
-    <div class="mb-3">
-        <button class="btn btn-primary" v-on:click="submit">送出</button>
+    <div class="form-floating mb-3">
+        <input class="form-control" placeholder="" v-model="usd">
+        <label class="form-label">美金</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input class="form-control" placeholder="" v-model="twd">
+        <label class="form-label">台幣</label>
     </div>
 </div>
-
 @section Scripts
 {
-    <script src="https://unpkg.com/vue@3.5.31/dist/vue.global.js"></script>
     <script>
         var appVue = {
-            data() { //model
+            data() {                // model
                 return {
-                    name: "",
+                    rate: 30,
+                    usd: 100,
+                    twd: 0
                 };
             },
-            methods: {
-                submit() {
-                    alert(this.name);
+            methods: {             // controller
+
+            },
+            watch: {
+                rate(newVal, oriVal) {
+                    this.twd = newVal * this.usd;
+                },
+                usd(newVal, oriVal) {
+                    this.twd = (newVal * this.rate).toFixed(2);
                 }
             }
         };
+
         var app = Vue.createApp(appVue).mount("#app");
+
+    </script>
     </script>
 }

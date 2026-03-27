@@ -11,43 +11,45 @@
 
 <body>
     <div id="app" class="container" style="width:40%">
-    <h3 class="mb-3 text-center">換匯功能</h3>
-    <div class="form-floating mb-3">
-        <input class="form-control" placeholder="" v-model="rate">
-        <label class="form-label">匯率</label>
+        <h3 class="mb-3 text-center">換匯功能</h3>
+        <div class="form-floating mb-3">
+            <input class="form-control" placeholder="" v-model="rate">
+            <label class="form-label">匯率</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input class="form-control" placeholder="" v-model="usd">
+            <label class="form-label">美金</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input class="form-control" placeholder="" v-model="twd">
+            <label class="form-label">台幣</label>
+        </div>
     </div>
-    <div class="form-floating mb-3">
-        <input class="form-control" placeholder="" v-model="usd">
-        <label class="form-label">美金</label>
-    </div>
-    <div class="form-floating mb-3">
-        <input class="form-control" placeholder="" v-model="twd">
-        <label class="form-label">台幣</label>
-    </div>
-</div>
     <!-- <script src="https://unpkg.com/vue@latest"></script>//避免版本更新需要維護 -->
     <script src="https://unpkg.com/vue@3.5.31/dist/vue.global.js"></script>
     <script>
         var appVue = {
-            data() { //model
+            data() {                // model
                 return {
-                   
+                    rate: 30,
+                    usd: 100,
+                    twd: 0
                 };
             },
-           
-            methods: {        //controller      
-                fullname() {
-                    return `${this.FirstName}${this.LastName}`;
-                }
+            methods: {             // controller
+
             },
-           
+            watch: {
+                rate(newVal, oriVal) {
+                    this.twd = newVal * this.usd;
+                },
+                usd(newVal, oriVal) {
+                    this.twd = (newVal * this.rate).toFixed(2);
+                }
+            }
         };
+
         var app = Vue.createApp(appVue).mount("#app");
-        console.log(app.LastName);
-        console.log(app.Age);
-        console.log(app.date);
-
-
 
     </script>
 </body>

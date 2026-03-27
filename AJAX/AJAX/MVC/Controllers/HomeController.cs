@@ -56,6 +56,18 @@ namespace MVC.Controllers
 		{
 			return View();              // Vue.cshtml
 		}
+		//Get:Home/GetExchangeRate
+		[HttpGet]
+        public async Task<string> GetExchangeRate() 
+        {
+          
+
+            HttpClient client = new HttpClient();
+            HttpResponseMessage Response=await client.GetAsync("https://openapi.taifex.com.tw/v1/DailyForeignExchangeRates");
+            string Json=await Response.Content.ReadAsStringAsync();
+
+			return Json;
+        }
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
