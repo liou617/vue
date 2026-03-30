@@ -14,8 +14,17 @@
     </div>
 </div>
 @section Scripts
+
 {
+    <script src="https://unpkg.com/vue@3.5.31/dist/vue.global.js"></script>
+
     <script>
+
+         var baseAddress="https://localhost:7080";       // Developer
+        //var baseAddress="https://xxx";                // Staging
+        //var baseAddress="https://yyy";                // Production
+        //var baseAddress="https://zzz";                // Cloud
+
         var appVue = {
             data() {                // model
                 return {
@@ -34,11 +43,23 @@
                 usd(newVal, oriVal) {
                     this.twd = (newVal * this.rate).toFixed(2);
                 }
+            },
+            mounted:async function(){
+            try{
+                var response=await fetch(`${baseAddress}/Home/GetExchangeRate`,{
+                method:"GET"
+                });
+                if (response.ok) {
+                    var rate=await response.json();
+				    this.rate=rate;
+                }
+            }catch(err){
+                alert(err.message);
+            }
             }
         };
 
         var app = Vue.createApp(appVue).mount("#app");
 
-    </script>
     </script>
 }

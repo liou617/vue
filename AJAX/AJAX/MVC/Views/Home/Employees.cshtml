@@ -7,7 +7,8 @@
 
 @section Scripts
 {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.11.0/axios.min.js" integrity="sha512-h9644v03pHqrIHThkvXhB2PJ8zf5E9IyVnrSfZg8Yj8k4RsO4zldcQc4Bi9iVLUCCsqNY0b4WXVV4UB+wbWENA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/vue@3.5.31/dist/vue.global.js"></script>
+
     <script>
         var baseAddress="https://localhost:7080";       // Developer
         //var baseAddress="https://xxx";                // Staging
@@ -23,7 +24,9 @@
                 });
                 if (response.ok) {
                     var data=await response.json();
-                    alert(JSON.stringify(data));
+                    // alert(JSON.stringify(data));
+                    // var rate = data[data.length-1]['USD/NTD'];
+                    alert(data);
                 } 
             }
             catch(err) {
