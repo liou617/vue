@@ -12,15 +12,15 @@
         <div class="container" style="width: 40%;">
             <h3 class="mb-3 text-center">登入網站</h3>
             <div class="form-floating mb-3">
-                <input class="form-control" v-model="name" placeholder="" />
+                <input class="form-control" v-model="name" placeholder="" v-on:keyup="enableLogin" />
                 <label class="form-label">帳號</label>
             </div>
             <div class="form-floating mb-3">
-                <input class="form-control" v-model="password" placeholder="" />
+                <input class="form-control" v-model="password" placeholder="" v-on:keyup="enableLogin" />
                 <label class="form-label">密碼</label>
             </div>
             <div class="mb-3">
-                <button class="btn btn-primary">送出</button>
+                <button class="btn btn-primary" v-bind:disabled="disableLogin" v-on:click="login">送出</button>
             </div>
         </div>
     </div>
@@ -30,11 +30,18 @@
             data() {            // model
                 return {
                     name: "",
-                    password: ""
+                    password: "",
+                    disableLogin: true
                 };
             },
             methods: {           // controller
-
+                enableLogin() {
+                    // alert("keyup");
+                    this.disableLogin = this.name.length <= 0 || this.password.length <= 0;
+                },
+                login() {
+                    alert("login");
+                }
             }
         };
         var app = Vue.createApp(appVue).mount("#app");
