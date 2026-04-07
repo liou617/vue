@@ -10,19 +10,51 @@
 </head>
 
 <body>
-    <div id="app">
+    <div id="app" class="container" style="width: 50%;">
+        <h3 class="mb-3 text-center">選擇費率方案</h3>
+        <div class="mb-3">
+            <label class="form-label">費率方案</label>
+            <select class="form-select" v-model="choice" v-on:change="changeOption">
+                <option v-for="option in options" v-bind:value="option.price">{{ option.name }}</option>
+            </select>
+        </div>
     </div>
 
     <script src="https://unpkg.com/vue@3.5.31/dist/vue.global.js"></script>
     <script>
+        const baseAddress = "https://localhost:7151";
         var appVue = {
             data() { //model
                 return {
+                    choice: 649,
+                    options: [
+                        // { name: "方案499", price: 499 },
+                        // { name: "方案699", price: 649 },
+                        // { name: "方案999", price: 899 }
+                    ]
 
                 };
             },
             methods: {
+                changeOption() {
+                    alert(this.choice);
+                }
+            },
+            mounted: async function () {
+                try {
+                    var response = await fetch(`${baseAddress}/api/Products`, {
+                        method: "GET",
+                    });
+                    if (response.ok) {
+                        var data = await response.json();
+                        // alert(JSON.stringify(data));
+                        this.options = data;
+                    }
 
+                }
+                catch (error) {
+                    alert(error);
+                }
             }
         };
         var app = Vue.createApp(appVue).mount("#app");
