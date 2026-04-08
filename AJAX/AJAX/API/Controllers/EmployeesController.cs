@@ -23,41 +23,57 @@ namespace API.Controllers
             _context = context;
         }
 
-        // GET: api/Employees
-        [HttpGet]
+        // Post: api/Employees/Filter
+        [HttpPost("Filter")]
         //public IEnumerable<Employee> GetEmployees()
-        public async Task<IEnumerable<EmployeeDTO>> GetEmployees()
+        public async Task<IEnumerable<EmployeeDTO>> FilterEmployees([FromBody] string keyword)
         {
-            return _context.Employees.Select(e=>new EmployeeDTO { 
+            int EmployeeId;
+            int.TryParse(keyword, out EmployeeId);
+            return _context.Employees.Where(e=>
+            e.EmployeeId==EmployeeId||
+            e.FirstName.Contains(keyword) ||
+            e.LastName.Contains(keyword) ||
+            e.Title.Contains(keyword)||
+            e.BirthDate.ToString().Contains(keyword) ||
+            e.HireDate.ToString().Contains(keyword) ||
+			e.Address.ToString().Contains(keyword) ||
+			e.City.ToString().Contains(keyword) ||
+			e.PostalCode.ToString().Contains(keyword) ||
+			e.Country.ToString().Contains(keyword) ||
+			e.HomePhone.ToString().Contains(keyword) 
+			).Select(e=>new EmployeeDTO { 
                 EmployeeId = e.EmployeeId,
                 FirstName = e.FirstName,
                 LastName = e.LastName,
                 Title = e.Title,
-            });      
+                BirthDate = e.BirthDate,
+                HireDate = e.HireDate,
+                Address = e.Address,
+                City = e.City,
+                PostalCode = e.PostalCode,
+                Country = e.Country,
+                HomePhone = e.HomePhone
+			});      
             //return await _context.Employees.ToListAsync();      //需要時間, 需要空間
         }
 
-        // GET: api/Employees/5
-        [HttpGet("{id}")]
-        public async Task<EmployeeDTO> GetEmployee(int id)
-        {
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee == null)
-            {
-                return null;
-            }
-            return new EmployeeDTO
-            {
-                EmployeeId = employee.EmployeeId,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Title = employee.Title,
-            };
-        }
 
-        // PUT: api/Employees/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        //GET api/Employees/1
+        [HttpGet("{id}")]
+        public async Task<FileResult> GetPhoto(int id)
+        {
+            string Filename = Path.Combine("StatiocFiles", "images", "NoLmage.jpg");
+            Employee? Emp = await _context.Employees.FindAsync(id);
+            byte[] ImageContent = Emp?.Photo ?? System.IO.File.ReadAllBytes(Filename);
+            return File(ImageContent,"image/jpeg");
+
+		}
+
+
+		// PUT: api/Employees/5
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPut("{id}")]
         public async Task<ResultDTO> PutEmployee(int id, EmployeeDTO employeeDTO)
         {
             if (id != employeeDTO.EmployeeId)
@@ -82,7 +98,21 @@ namespace API.Controllers
                 Emp.FirstName = employeeDTO.FirstName;
                 Emp.LastName = employeeDTO.LastName;
                 Emp.Title = employeeDTO.Title;
-                _context.Entry(Emp).State = EntityState.Modified;
+                Emp.BirthDate = employeeDTO.BirthDate;
+                Emp.HireDate = employeeDTO.HireDate;
+                Emp.Address = employeeDTO.Address;
+                Emp.City = employeeDTO.City;
+                Emp.PostalCode = employeeDTO.PostalCode;
+                Emp.Country = employeeDTO.Country;
+                Emp.HomePhone = employeeDTO.HomePhone;
+                if (employeeDTO.Photo != null) 
+                {
+                    using (BinaryReader br = new BinaryReader(employeeDTO.Photo.OpenReadStream()))
+                    { 
+                    Emp.Photo = br.ReadBytes((int)employeeDTO.Photo.Length);
+					}                          
+                }
+				_context.Entry(Emp).State = EntityState.Modified;
                 try
                 {
                     await _context.SaveChangesAsync();
