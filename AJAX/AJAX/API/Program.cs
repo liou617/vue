@@ -2,6 +2,7 @@
 using API.Models;
 using Microsoft.EntityFrameworkCore;
 using API.Controllers;
+using Microsoft.Extensions.FileProviders;
 
 namespace API
 {
@@ -39,7 +40,10 @@ namespace API
             app.UseCors();
             app.UseHttpsRedirection();
             app.UseAuthorization();
-
+            app.UseStaticFiles(new StaticFileOptions {
+            FileProvider=new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "StatiocFiles")),
+            RequestPath= "/StatiocFiles"
+			}); //指定放置靜態文件資料夾
 
             app.MapControllers();
 
