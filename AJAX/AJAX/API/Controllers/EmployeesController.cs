@@ -144,8 +144,23 @@ namespace API.Controllers
                 FirstName = employeeDTO.FirstName,
                 LastName = employeeDTO.LastName,
                 Title = employeeDTO.Title,
-            };
-            _context.Employees.Add(Emp);
+				BirthDate = employeeDTO.BirthDate,
+				HireDate = employeeDTO.HireDate,
+				Address = employeeDTO.Address,
+				City = employeeDTO.City,
+				PostalCode = employeeDTO.PostalCode,
+				Country = employeeDTO.Country,  
+				HomePhone = employeeDTO.HomePhone
+			};
+			Emp.HomePhone = employeeDTO.HomePhone;
+			if (employeeDTO.Photo != null)
+			{
+				using (BinaryReader br = new BinaryReader(employeeDTO.Photo.OpenReadStream()))
+				{
+					Emp.Photo = br.ReadBytes((int)employeeDTO.Photo.Length);
+				}
+			}
+			_context.Employees.Add(Emp);
             await _context.SaveChangesAsync();
             employeeDTO.EmployeeId = Emp.EmployeeId;
             return new ResultDTO
